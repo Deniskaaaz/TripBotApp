@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.tripbot.app-merged_res-21:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "com.tripbot.app-main-23:/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.tripbot.app-merged_res-21:/layout_activity_main.xml.flat",
+        "source": "com.tripbot.app-main-23:/layout/activity_main.xml"
+    }
+]
