@@ -16,6 +16,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tripbot.app.data.models.Trip
 import com.tripbot.app.ui.viewmodels.TripsViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TripListScreen(
     onTripClick: (Int) -> Unit,

@@ -10,6 +10,7 @@ import com.tripbot.app.data.api.RetrofitInstance
 import com.tripbot.app.data.models.RouteRequest
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateTripScreen(onTripCreated: () -> Unit) {
     var origin by remember { mutableStateOf("") }
