@@ -1,4 +1,6 @@
+@file:OptIn(ExperimentalMaterialApi::class)
 package com.tripbot.app.ui.screens
+import androidx.compose.foundation.layout.fillMaxSize
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
