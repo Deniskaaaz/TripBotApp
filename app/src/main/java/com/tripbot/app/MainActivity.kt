@@ -5,10 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.tripbot.app.ui.screens.CreateTripScreen
 import com.tripbot.app.ui.screens.TripDetailScreen
@@ -54,5 +54,8 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+        // Проверка обновлений при запуске
+        UpdateChecker.checkForUpdate(this)
     }
 }
