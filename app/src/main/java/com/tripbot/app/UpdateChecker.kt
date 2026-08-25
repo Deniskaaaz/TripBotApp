@@ -20,7 +20,6 @@ import java.io.FileOutputStream
 object UpdateChecker {
     private const val REPO_OWNER = "Deniskaaaz"
     private const val REPO_NAME = "TripBotApp"
-    private const val CURRENT_VERSION = "1.0"
 
     fun checkForUpdate(context: Context) {
         GlobalScope.launch(Dispatchers.IO) {
@@ -33,7 +32,7 @@ object UpdateChecker {
                 if (!response.isSuccessful) return@launch
 
                 val json = JSONObject(response.body()?.string() ?: return@launch)
-                val tagName = json.getString("tag_name") // например, "v26"
+                val tagName = json.getString("tag_name") // например, "v1.0.1"
                 val assets = json.getJSONArray("assets")
                 if (assets.length() == 0) return@launch
 
@@ -41,7 +40,9 @@ object UpdateChecker {
                 val downloadUrl = apkAsset.getString("browser_download_url")
 
                 val latestVersion = tagName.removePrefix("v")
-                if (isNewer(latestVersion, CURRENT_VERSION)) {
+                val currentVersion = BuildConfig.VERSION_NAME
+
+                if (isNewer(latestVersion, currentVersion)) {
                     withContext(Dispatchers.Main) {
                         showUpdateDialog(context, downloadUrl)
                     }
@@ -53,9 +54,6 @@ object UpdateChecker {
     }
 
     private fun isNewer(latest: String, current: String): Boolean {
-        if (!latest.contains(".") || !current.contains(".")) {
-            return false
-        }
         val latestParts = latest.split(".").map { it.toIntOrNull() ?: 0 }
         val currentParts = current.split(".").map { it.toIntOrNull() ?: 0 }
         for (i in 0 until maxOf(latestParts.size, currentParts.size)) {
