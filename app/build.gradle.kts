@@ -46,32 +46,35 @@ android {
 }
 
 dependencies {
-    // Compose BOM
+    // Compose BOM (управляет версиями Compose-библиотек)
     implementation(platform("androidx.compose:compose-bom:2023.10.01"))
 
-    // Только Material 3, без Material 2
+    // Базовые компоненты Compose
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
 
-    // Activity Compose
+    // Activity Compose для интеграции с Activity
     implementation("androidx.activity:activity-compose:1.8.2")
 
-    // Lifecycle ViewModel Compose
+    // Корутины для фоновой работы (используются в UpdateChecker)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+    // Lifecycle ViewModel Compose (если понадобится)
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
 
-    // Retrofit
+    // Retrofit для сетевых запросов к API
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
-    // OkHttp
+    // OkHttp (HTTP-клиент)
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
-    // Coil (если нужно)
+    // Coil для загрузки изображений (может не использоваться, но не помешает)
     implementation("io.coil-kt:coil-compose:2.5.0")
 
-    // Навигация (если нужна)
+    // Навигация в Compose
     implementation("androidx.navigation:navigation-compose:2.7.6")
 
     // Тестирование

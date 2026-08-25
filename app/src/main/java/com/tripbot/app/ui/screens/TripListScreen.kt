@@ -7,42 +7,50 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tripbot.app.data.models.Trip
-import com.tripbot.app.ui.viewmodels.TripsViewModel
+import com.tripbot.app.ui.viewmodels.TripListViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TripListScreen(
     onTripClick: (Int) -> Unit,
     onAddTrip: () -> Unit,
-    viewModel: TripsViewModel = viewModel()
+    viewModel: TripListViewModel = viewModel()
 ) {
-    val trips by viewModel.trips
-    val isLoading by viewModel.isLoading
-    val error by viewModel.error
+    val trips by viewModel.trips.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
 
     Scaffold(
         topBar = { TopAppBar(title = { Text("Мои поездки") }) },
         floatingActionButton = {
             FloatingActionButton(onClick = onAddTrip) {
-                Icon(Icons.Default.Add, contentDescription = "Новая поездка")
+                Icon(Icons.Default.Add, contentDescription = "Добавить")
             }
         }
     ) { padding ->
-        Box(modifier = Modifier.fillMaxSize().padding(padding)) {
-            when {
-                isLoading -> CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                error != null -> Text("Ошибка: $error", modifier = Modifier.align(Alignment.Center))
-                trips.isEmpty() -> Text("Нет поездок", modifier = Modifier.align(Alignment.Center))
-                else -> LazyColumn {
-                    items(trips) { trip ->
-                        TripItem(trip) { onTripClick(trip.id) }
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+        ) {
+            if (isLoading) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            } else {
+                if (trips.isEmpty()) {
+                    Text(
+                        text = "Пока нет поездок",
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                } else {
+                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+                        items(trips) { trip ->
+                            TripItem(trip = trip, onClick = { onTripClick(trip.id) })
+                        }
                     }
                 }
             }
@@ -51,18 +59,26 @@ fun TripListScreen(
 }
 
 @Composable
-fun TripItem(trip: Trip, onClick: () -> Unit) {
+private fun TripItem(trip: Trip, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
-            .clickable { onClick() },
-        elevation = CardDefaults.cardElevation(4.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .clickable(onClick = onClick)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = "${trip.start_point} → ${trip.end_point}", style = MaterialTheme.typography.titleMedium)
-            Text(text = "📏 ${trip.total_km} км | 💰 ${trip.total_cost} руб", style = MaterialTheme.typography.bodyMedium)
-            Text(text = trip.timestamp, style = MaterialTheme.typography.bodySmall)
+            Text(
+                text = "${trip.startPoint} → ${trip.endPoint}",
+                style = MaterialTheme.typography.titleMedium
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(text = "${trip.distanceKm} км · ${trip.durationMin} мин")
+            if (trip.pauseMin != null && trip.pauseMin > 0) {
+                Text(
+                    text = "Пауза: ${trip.pauseMin} мин",
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
         }
     }
 }
