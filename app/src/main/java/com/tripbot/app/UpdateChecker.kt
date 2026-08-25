@@ -47,19 +47,15 @@ object UpdateChecker {
                     }
                 }
             } catch (e: Exception) {
-                // Ошибка сети или парсинга – просто игнорируем
                 Log.e("UpdateChecker", "Check update error", e)
             }
         }
     }
 
     private fun isNewer(latest: String, current: String): Boolean {
-        // Если строка версии не содержит точку (например, "26"), 
-        // считаем её несовместимой с нашей "1.0" и не предлагаем обновление.
         if (!latest.contains(".") || !current.contains(".")) {
             return false
         }
-
         val latestParts = latest.split(".").map { it.toIntOrNull() ?: 0 }
         val currentParts = current.split(".").map { it.toIntOrNull() ?: 0 }
         for (i in 0 until maxOf(latestParts.size, currentParts.size)) {
@@ -90,7 +86,11 @@ object UpdateChecker {
                 val response = client.newCall(request).execute()
                 if (!response.isSuccessful) {
                     withContext(Dispatchers.Main) {
-                        Toast.makeText(context, "Ошибка скачивания: ${response.code}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            "Ошибка скачивания: ${response.code()}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                     return@launch
                 }
@@ -118,7 +118,11 @@ object UpdateChecker {
             } catch (e: Exception) {
                 Log.e("UpdateChecker", "Install error", e)
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(context, "Не удалось установить: ${e.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        context,
+                        "Не удалось установить: ${e.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         }
