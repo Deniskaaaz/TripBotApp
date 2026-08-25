@@ -54,7 +54,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
 
-    // Material 2 (для ExperimentalMaterialApi и некоторых компонентов)
+    // Material 2 (для ExperimentalMaterialApi)
     implementation("androidx.compose.material:material:1.5.4")
 
     // Activity Compose
@@ -67,14 +67,14 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
-    // OkHttp (логирование и сеть)
+    // OkHttp
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
-    // Coil для загрузки изображений (если понадобится)
+    // Coil (если нужно)
     implementation("io.coil-kt:coil-compose:2.5.0")
 
-    // Навигация (если используете Navigation Compose)
+    // Навигация (если нужна)
     implementation("androidx.navigation:navigation-compose:2.7.6")
 
     // Тестирование
