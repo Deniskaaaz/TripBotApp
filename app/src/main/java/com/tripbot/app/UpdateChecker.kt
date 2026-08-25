@@ -4,6 +4,8 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
+import android.widget.Toast
 import androidx.core.content.FileProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -31,7 +33,7 @@ object UpdateChecker {
                 if (!response.isSuccessful) return@launch
 
                 val json = JSONObject(response.body()?.string() ?: return@launch)
-                val tagName = json.getString("tag_name")
+                val tagName = json.getString("tag_name") // например, "v26"
                 val assets = json.getJSONArray("assets")
                 if (assets.length() == 0) return@launch
 
@@ -45,12 +47,19 @@ object UpdateChecker {
                     }
                 }
             } catch (e: Exception) {
-                // ignore
+                // Ошибка сети или парсинга – просто игнорируем
+                Log.e("UpdateChecker", "Check update error", e)
             }
         }
     }
 
     private fun isNewer(latest: String, current: String): Boolean {
+        // Если строка версии не содержит точку (например, "26"), 
+        // считаем её несовместимой с нашей "1.0" и не предлагаем обновление.
+        if (!latest.contains(".") || !current.contains(".")) {
+            return false
+        }
+
         val latestParts = latest.split(".").map { it.toIntOrNull() ?: 0 }
         val currentParts = current.split(".").map { it.toIntOrNull() ?: 0 }
         for (i in 0 until maxOf(latestParts.size, currentParts.size)) {
@@ -79,7 +88,12 @@ object UpdateChecker {
                 val client = OkHttpClient()
                 val request = Request.Builder().url(url).build()
                 val response = client.newCall(request).execute()
-                if (!response.isSuccessful) return@launch
+                if (!response.isSuccessful) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "Ошибка скачивания: ${response.code}", Toast.LENGTH_SHORT).show()
+                    }
+                    return@launch
+                }
 
                 val apkFile = File(context.cacheDir, "update.apk")
                 val inputStream = response.body()?.byteStream() ?: return@launch
@@ -102,7 +116,10 @@ object UpdateChecker {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 context.startActivity(intent)
             } catch (e: Exception) {
-                // ignore
+                Log.e("UpdateChecker", "Install error", e)
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "Не удалось установить: ${e.message}", Toast.LENGTH_LONG).show()
+                }
             }
         }
     }
