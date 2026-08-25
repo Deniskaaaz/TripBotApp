@@ -68,14 +68,14 @@ private fun TripItem(trip: Trip, onClick: () -> Unit) {
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = "${trip.startPoint} → ${trip.endPoint}",
+                text = "${trip.city}: ${trip.startPoint} → ${trip.endPoint}",
                 style = MaterialTheme.typography.titleMedium
             )
             Spacer(modifier = Modifier.height(4.dp))
-            Text(text = "${trip.distanceKm} км · ${trip.durationMin} мин")
-            if (trip.pauseMin != null && trip.pauseMin > 0) {
+            Text(text = "${trip.totalKm} км · ${trip.totalDurationSec / 60} мин")
+            if (trip.totalPauseSec > 0) {
                 Text(
-                    text = "Пауза: ${trip.pauseMin} мин",
+                    text = "Пауза: ${trip.totalPauseSec / 60} мин",
                     style = MaterialTheme.typography.bodySmall
                 )
             }

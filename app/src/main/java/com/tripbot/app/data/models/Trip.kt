@@ -4,12 +4,14 @@ import com.google.gson.annotations.SerializedName
 
 data class Trip(
     @SerializedName("id") val id: Int,
-    @SerializedName("user_id") val userId: Int,
+    @SerializedName("timestamp") val timestamp: String,
+    @SerializedName("city") val city: String,
     @SerializedName("start_point") val startPoint: String,
     @SerializedName("end_point") val endPoint: String,
-    @SerializedName("distance_km") val distanceKm: Double,
-    @SerializedName("duration_min") val durationMin: Int,
-    @SerializedName("pause_min") val pauseMin: Int? = 0,
-    @SerializedName("created_at") val createdAt: String,
-    @SerializedName("points") val points: String? = null
+    @SerializedName("total_km") val totalKm: Double,
+    @SerializedName("total_duration_sec") val totalDurationSec: Int,
+    @SerializedName("total_pause_sec") val totalPauseSec: Int,
+    @SerializedName("total_cost") val totalCost: Double,
+    @SerializedName("points") val points: List<String>,
+    @SerializedName("username") val username: String? = null
 )
