@@ -16,13 +16,19 @@ import okhttp3.Request
 import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
-import com.tripbot.app.BuildConfig
 
 object UpdateChecker {
     private const val REPO_OWNER = "Deniskaaaz"
     private const val REPO_NAME = "TripBotApp"
 
     fun checkForUpdate(context: Context) {
+        // Получаем текущую версию приложения через PackageManager
+        val currentVersion = try {
+            context.packageManager.getPackageInfo(context.packageName, 0).versionName
+        } catch (e: Exception) {
+            "1.0.0" // fallback, если что-то пойдёт не так
+        }
+
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val client = OkHttpClient()
@@ -41,7 +47,6 @@ object UpdateChecker {
                 val downloadUrl = apkAsset.getString("browser_download_url")
 
                 val latestVersion = tagName.removePrefix("v")
-                val currentVersion = BuildConfig.VERSION_NAME
 
                 if (isNewer(latestVersion, currentVersion)) {
                     withContext(Dispatchers.Main) {
