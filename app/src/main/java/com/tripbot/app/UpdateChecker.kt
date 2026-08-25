@@ -16,6 +16,7 @@ import okhttp3.Request
 import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
+import com.tripbot.app.BuildConfig
 
 object UpdateChecker {
     private const val REPO_OWNER = "Deniskaaaz"
