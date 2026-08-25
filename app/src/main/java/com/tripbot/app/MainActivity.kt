@@ -5,9 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import com.tripbot.app.ui.screens.TripListScreen
 
 class MainActivity : ComponentActivity() {
@@ -16,7 +13,16 @@ class MainActivity : ComponentActivity() {
         setContent {
             MaterialTheme {
                 Surface {
-                    TripListScreen()
+                    TripListScreen(
+                        onTripClick = { tripId ->
+                            // Здесь можно открыть детали поездки
+                            // Пока заглушка
+                        },
+                        onAddTrip = {
+                            // Действие при нажатии "Добавить поездку"
+                            // Пока заглушка
+                        }
+                    )
                 }
             }
         }
